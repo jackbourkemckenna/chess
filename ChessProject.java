@@ -123,6 +123,16 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
       return true;
     }
   }
+  private Boolean piecePresent1(int x, int y){
+    Component c = chessBoard.findComponentAt(x, y);
+    if(c instanceof JPanel){
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
+
 
   /*
   This is a method to check if a piece is a Black piece.
@@ -153,6 +163,23 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
     }
     return oponent;
   }
+  private Boolean checkBlackKing(int newX, int newY){
+    Boolean oponent;
+    Component c1 = chessBoard.findComponentAt(newX, newY);
+    JLabel awaitingPiece = (JLabel)c1;
+    String tmp1 = awaitingPiece.getIcon().toString();
+
+    if(((tmp1.contains("BlackKing")))){
+      oponent = true;
+    }
+    else{
+      oponent = false;
+    }
+    return oponent;
+  }
+
+
+
 //check King
 
   /*
@@ -181,9 +208,6 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
   public void mouseDragged(MouseEvent me) {
     if (chessPiece == null) return;
     chessPiece.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
-    System.out.println(me.getX()+" ||  "+me.getY());
-    System.out.println(xAdjustment+" a||  "+yAdjustment);
-
   }
 
   /*
@@ -225,24 +249,65 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
     System.out.println("----------------------------------------------");
 
 
-    if(pieceName.equals("BlackPawn")){
+
+
+
+    if(pieceName.equals("BlackPawn1")){
       validMove = true;
 
   }
   // King of the north
   //if((startX == (e.getX()/75))&&((((e.getY()/75)-startY)==1)||((e.getY()/75)-startY)==2))
   else if (pieceName.contains("King")){
+    int distance = Math.abs(startX - landingX);
+
+    Boolean isCheck = false;
     if ((xMovement == 1 && yMovement == 1 || xMovement == 0 && yMovement == 1 || xMovement == 1 && yMovement ==0)){
+      //if((!piecePresent(e.getX(), (e.getY())))&&(!piecePresent(e.getX(), (e.getY()-75)))){
+        //if((!piecePresent(e.getX(),(e.getY()))))
+        //validMove = true;
+      //}
+      if(piecePresent(e.getX(), (e.getY()))){
+        if(pieceName.contains("White")){
+          if(checkWhiteOponent(e.getX(), e.getY())){
+            if(checkBlackKing(e.getX(), e.getY())&& xMovement == 1 && yMovement == 1 || xMovement == 0 && yMovement == 1 || xMovement == 1 && yMovement ==0){
+              //    int xMovement = Math.abs((e.getX()/75)-startX);
+              //    int yMovement = Math.abs((e.getY()/75)-startY);
+              //if((startX == (e.getX()/75))&&((e.getY()/75)-startY)==1){
+              System.out.println("x and y");
 
-        if (checkBlackOponent(e.getX(), e.getY())) {
-          validMove = true;
+
+
+}
+          } else {
+            validMove = false;
+              System.out.println("check");
+          }
         } else {
-          validMove = false;
-
+          if(checkBlackOponent(e.getX(), e.getY())){
+            //allows me to eat the black
+            //
+            validMove = true;
+            System.out.println("hmmm");
+          } else {
+            validMove=false;
+            System.out.println("2");
+          }
         }
+      } else {
+        validMove=true;
+      }
+    }
+      else{
+
+        validMove = false;
+        System.out.println("nope");
+
+      }
+
 
 }
-}
+
 
     //the sidewase boi
 
@@ -552,10 +617,11 @@ else if (pieceName.contains("Knight")){
 
 
 //pawn
-    else if(pieceName.equals("WhitePawn")){
-      if(((landingX < 0)||(landingX>7))||((landingY<0)|| landingY > 7)){
-        validMove = false;
 
+
+      else if(pieceName.equals("WhitePawn")){
+      if(startY == 1)
+      {
         if((startX == (e.getX()/75))&&((((e.getY()/75)-startY)==1)||((e.getY()/75)-startY)==2))
         {
 
@@ -593,28 +659,15 @@ else if (pieceName.contains("Knight")){
             System.out.println("nope1");
           }
           else{
-            validMove = false;
+            validMove = true;
             System.out.println("yup");
 
 
           }
-          //why did this work
-          /*if((((e.getY()/75)-startY)==1)){
-          if(checkWhiteOponent(e.getX(), e.getY())){
-          validMove = true;
-          if(startY == 6){
-          success = true;
-        }
-      }
-      else{
-      validMove = false;
-    }
 
-
-  }
-  */
 }
 }
+
 else{
   int newY = e.getY()/75;
   int newX = e.getX()/75;
@@ -653,6 +706,52 @@ else{
   }
 }
 }
+
+
+
+//test black pawn
+else if(pieceName.equals("BlackPawn")){
+
+    if(startY==6){
+      if(((yMovement==1)||(yMovement==2))&&(startY>landingY)&&(xMovement==0)){
+        if(yMovement == 2){
+          if((!piecePresent(e.getX(), e.getY()))&&(!piecePresent(e.getX(), (e.getY()+75)))){
+            validMove = true;
+          }
+        }
+        else {
+          if(!piecePresent(e.getX(), e.getY())){
+            validMove = true;
+          }
+        }
+      }
+      else if((yMovement==1)&&(startY>landingY)&&(xMovement==1)) {
+        if(piecePresent(e.getX(), e.getY())){
+          if(checkBlackOponent(e.getX(), e.getY())){
+            validMove = true;
+          }
+        }
+      }
+    }
+    else {
+      if((yMovement==1)&&(startY>landingY)&&(xMovement==0)){
+        if(!piecePresent(e.getX(), e.getY())){
+          validMove = true; //TODO: Turn black pawn into queen
+        }
+      }
+      else if((yMovement==1)&&(startY>landingY)&&(xMovement==1)) {
+        if(piecePresent(e.getX(), e.getY())){
+          if(checkBlackOponent(e.getX(), e.getY())){
+            validMove = true;
+          }
+        }
+      }
+    }
+
+}
+
+
+
 
 
 if(!validMove){

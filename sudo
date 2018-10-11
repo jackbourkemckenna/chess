@@ -1,0 +1,20 @@
+if(((landingX == startX+1) && (landingY == startY+2)) || ((landingX==startX-1) &&(landingY ==
+startY+2))||((landingX==startX+2) && (landingY == startY+1))||((landingX==startX-2) &&(landingY==
+startY+1))||((landingX==startX+1) && (landingY == startY-2))||((landingX==startX-1) &&(landingY==
+startY-2))||((landingX==startX+2) && (landingY == startY-1))||((landingX==startX-2) &&(landingY==
+startY-1))){
+
+
+
+
+
+
+check one square ahead all around
+if peice pressent x75 & y75
+75+75
+
+
+if((startX == (e.getX()/75))&&((((e.getY()/75)-startY)==1)||((e.getY()/75)-startY)==2))
+
+
+  Boolean inTheWay = false;
